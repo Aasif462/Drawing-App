@@ -13,10 +13,63 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
+
+    private val camararesult:ActivityResultLauncher<String> =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()){
+                isGranted ->
+                    if (isGranted){
+                        Toast.makeText(applicationContext , "Permission Granted!" , Toast.LENGTH_LONG).show()
+                    }
+                    else
+                        Toast.makeText(applicationContext , "Permission Denied!" , Toast.LENGTH_LONG).show()
+            }
+
+    private val camaraAndLocationResult:ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()){
+            permisions ->
+                permisions.entries.forEach{
+                    val permissionName = it.key
+                    val isGranted = it.value
+
+                    if(isGranted){
+                        if (permissionName == android.Manifest.permission.ACCESS_FINE_LOCATION){
+                            Toast.makeText(applicationContext , "Permission Granted for Location" , Toast.LENGTH_LONG).show()
+                        }
+                        else if(permissionName == android.Manifest.permission.ACCESS_COARSE_LOCATION){
+                            Toast.makeText(applicationContext , "Permission Granted For Coarse Location" , Toast.LENGTH_LONG).show()
+                        }
+                        else{
+                            Toast.makeText(applicationContext , "Permission Granted for Camara!" , Toast.LENGTH_LONG).show()
+                        }
+
+                    }
+
+
+                    else{
+                        if (permissionName == android.Manifest.permission.ACCESS_FINE_LOCATION){
+                            Toast.makeText(applicationContext , "Permission denied Location" , Toast.LENGTH_LONG).show()
+                        }
+                        else if(permissionName == android.Manifest.permission.ACCESS_COARSE_LOCATION){
+                            Toast.makeText(applicationContext , "Permission Denied  Coarse Location" , Toast.LENGTH_LONG).show()
+                        }
+                        else{
+                            Toast.makeText(applicationContext , "Permission denied Camara!" , Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            }
+
+
 
     private lateinit var drawingView: DrawingView
     private lateinit var mImageButtonCurrentPaint:ImageButton
@@ -26,7 +79,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val linearLayoutPaintColors:LinearLayout = findViewById(R.id.linearLayout)
+        val imagePicker:ImageButton = findViewById(R.id.imagePicker)
 
+        imagePicker.setOnClickListener{
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
+                showRationalDialog("Permission Demo requires camara access" , "Camara Cannot be used because Camara access is denied" )
+            }
+            else{
+            camaraAndLocationResult.launch(arrayOf(android.Manifest.permission.CAMERA , android.Manifest.permission.ACCESS_FINE_LOCATION))
+            }
+        }
 
         drawingView = findViewById(R.id.drawing_view)
         drawingView.setSizeforBrush(20.toFloat())
@@ -79,5 +141,15 @@ class MainActivity : AppCompatActivity() {
 
             mImageButtonCurrentPaint = view
         }
+    }
+
+    fun showRationalDialog(title:String , message:String){
+        val builder:AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(message)
+            .setPositiveButton("Cancel")
+            {dialog , _->dialog.dismiss()}
+
+        builder.create().show()
     }
 }
