@@ -3,7 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/layout/activity_main.xml" value="0.19912280701754387" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/color_red.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/drawable_view.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/gallery.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/ic_paintbrush.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/large.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/logo_background.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/medium.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/pallet_normal.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/pallete_pressed.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/drawable/small.xml" value="0.2425" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Android Realtime Applications/Drawing App/app/src/main/res/layout/dialog_brushsize.xml" value="0.2" />
       </map>
     </option>
   </component>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/smallBrush"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#000000"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/small"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/mediumBrush"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#000000"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/medium"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/largeBrush"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#000000"
+        android:src="@drawable/large"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
