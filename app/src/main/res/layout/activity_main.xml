@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/image" />
+             />
 
         <com.example.drawingapp.DrawingView
             android:id="@+id/drawing_view"
@@ -156,6 +156,16 @@
             android:backgroundTint="#D1D1D1"
             app:srcCompat="@drawable/gallery"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#D1D1D1"
+            app:srcCompat="@drawable/ic_undo_alt"
+            tools:ignore="SpeakableTextPresentCheck"
+            app:tint="#000000" />
 
         <ImageButton
             android:id="@+id/brush"

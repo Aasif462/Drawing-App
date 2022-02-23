@@ -1,43 +1,75 @@
 package com.example.drawingapp
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.Context
-import android.media.Image
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
-import java.util.jar.Manifest
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val camararesult:ActivityResultLauncher<String> =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()){
-                isGranted ->
-                    if (isGranted){
-                        Toast.makeText(applicationContext , "Permission Granted!" , Toast.LENGTH_LONG).show()
+    private var openGallery:ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+
+        {
+            result ->
+                if (result.resultCode == RESULT_OK && result.data!=null) {
+                    val imageBack: ImageView = findViewById(R.id.iv_background)
+                    imageBack.setImageURI(result.data?.data)
+                }
+        }
+
+    private val requestPermission:ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
+            permissions.entries.forEach {
+                val permissionName = it.key
+                val isGranted = it.value
+
+                if (isGranted) {
+//                    if (permissionName == android.Manifest.permission.READ_EXTERNAL_STORAGE) {
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "Permission Granted for Storage",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+
+                    val pickIntent: Intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    openGallery.launch(pickIntent)
+
+                    } else {
+                        if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Permission Denied!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                    else
-                        Toast.makeText(applicationContext , "Permission Denied!" , Toast.LENGTH_LONG).show()
+                }
             }
 
-    private val camaraAndLocationResult:ActivityResultLauncher<Array<String>> =
+    val camaraAndLocationResult:ActivityResultLauncher<Array<String>> =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()){
-            permisions ->
-                permisions.entries.forEach{
+            permissions ->
+                permissions.entries.forEach{
                     val permissionName = it.key
                     val isGranted = it.value
 
@@ -51,10 +83,7 @@ class MainActivity : AppCompatActivity() {
                         else{
                             Toast.makeText(applicationContext , "Permission Granted for Camara!" , Toast.LENGTH_LONG).show()
                         }
-
                     }
-
-
                     else{
                         if (permissionName == android.Manifest.permission.ACCESS_FINE_LOCATION){
                             Toast.makeText(applicationContext , "Permission denied Location" , Toast.LENGTH_LONG).show()
@@ -69,10 +98,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
-
     private lateinit var drawingView: DrawingView
     private lateinit var mImageButtonCurrentPaint:ImageButton
+    private lateinit var imagePicker:ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,12 +110,20 @@ class MainActivity : AppCompatActivity() {
         val imagePicker:ImageButton = findViewById(R.id.imagePicker)
 
         imagePicker.setOnClickListener{
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
-                showRationalDialog("Permission Demo requires camara access" , "Camara Cannot be used because Camara access is denied" )
-            }
-            else{
-            camaraAndLocationResult.launch(arrayOf(android.Manifest.permission.CAMERA , android.Manifest.permission.ACCESS_FINE_LOCATION))
-            }
+
+            //Permission for Camara and Location
+
+//            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
+//                showRationalDialog("Permission Demo requires camara access" , "Camara Cannot be used because Camara access is denied" )
+//            }
+//            else{
+//            camaraAndLocationResult.launch(arrayOf(android.Manifest.permission.CAMERA , android.Manifest.permission.ACCESS_FINE_LOCATION))
+//            }
+            requestStoragePermission()
+        }
+
+        undo.setOnClickListener{
+            drawingView.onClickUndo()
         }
 
         drawingView = findViewById(R.id.drawing_view)
@@ -103,7 +139,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun brushSizeChooseDialog(){
+    private fun requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this , Manifest.permission.READ_EXTERNAL_STORAGE)){
+            showRationalDialog("Kids Drawing App" , "Kids Drawing App" + "needs to Access Your External Storage")
+        }
+        else{
+            requestPermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+        }
+    }
+
+    fun brushSizeChooseDialog(){
         val dialog:View = LayoutInflater.from(this).inflate(R.layout.dialog_brushsize , null)
         val builder:AlertDialog = AlertDialog.Builder(this).create()
         builder.setView(dialog)
@@ -143,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showRationalDialog(title:String , message:String){
+    private fun showRationalDialog(title:String, message:String){
         val builder:AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle(title)
         builder.setMessage(message)
@@ -152,4 +197,9 @@ class MainActivity : AppCompatActivity() {
 
         builder.create().show()
     }
+
 }
+
+
+
+
