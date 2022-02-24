@@ -175,6 +175,16 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_paintbrush"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#D1D1D1"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_save"
+            android:layout_marginStart="8dp"
+            tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
 

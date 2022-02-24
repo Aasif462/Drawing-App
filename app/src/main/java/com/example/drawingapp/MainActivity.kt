@@ -4,6 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -126,6 +129,10 @@ class MainActivity : AppCompatActivity() {
             drawingView.onClickUndo()
         }
 
+        save.setOnClickListener{
+
+        }
+
         drawingView = findViewById(R.id.drawing_view)
         drawingView.setSizeforBrush(20.toFloat())
         mImageButtonCurrentPaint = linearLayoutPaintColors[0]  as ImageButton
@@ -196,6 +203,23 @@ class MainActivity : AppCompatActivity() {
             {dialog , _->dialog.dismiss()}
 
         builder.create().show()
+    }
+
+    private fun getBitmapFromView(view: View) :Bitmap{
+        val returnedBitmap = Bitmap
+            .createBitmap(view.width , view.height , Bitmap.Config.ARGB_8888)
+
+        val canvas:Canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas)
+        }
+        else{
+            canvas.drawColor(Color.WHITE)
+        }
+        view.draw(canvas)
+
+        return returnedBitmap
     }
 
 }
